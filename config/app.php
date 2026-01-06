@@ -54,6 +54,11 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
+    'dev_portfolio_url' => env('DEV_PORTFOLIO_URL', '#'),
+    'instagram_url' => env('INSTAGRAM_URL', '#'),
+    'facebook_url' => env('FACEBOOK_URL', '#'),
+    'tiktok_url' => env('TIKTOK_URL', '#'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone
