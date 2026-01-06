@@ -59,10 +59,40 @@ class CatalogController extends Controller
     {
         abort_unless($product->is_active, 404);
 
-        $product->load(['images', 'variants']);
+        $product->load(['images', 'variants', 'bulkDiscounts', 'category']);
+
+        $limit = 8;
+        $sameCategory = Product::query()
+            ->where('is_active', true)
+            ->where('id', '!=', $product->id)
+            ->when($product->category_id, fn ($q) => $q->where('category_id', $product->category_id))
+            ->with(['images', 'category'])
+            ->withCount(['variants as in_stock_variants_count' => function ($q) {
+                $q->where('quantity', '>', 0);
+            }])
+            ->orderByDesc('id')
+            ->take($limit)
+            ->get();
+
+        $remaining = max(0, $limit - $sameCategory->count());
+        $otherProducts = collect();
+        if ($remaining > 0) {
+            $otherProducts = Product::query()
+                ->where('is_active', true)
+                ->where('id', '!=', $product->id)
+                ->when($product->category_id, fn ($q) => $q->where('category_id', '!=', $product->category_id))
+                ->with(['images', 'category'])
+                ->withCount(['variants as in_stock_variants_count' => function ($q) {
+                    $q->where('quantity', '>', 0);
+                }])
+                ->orderByDesc('id')
+                ->take($remaining)
+                ->get();
+        }
 
         return view('store.product', [
             'product' => $product,
+            'relatedProducts' => $sameCategory->concat($otherProducts),
         ]);
     }
 

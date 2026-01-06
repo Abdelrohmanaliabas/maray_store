@@ -11,11 +11,11 @@
         <a href="{{ route('store.home') }}" class="text-sm text-slate-700 hover:underline">عرض كل الأقسام</a>
     </div>
 
-    <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3 anim-stagger">
+    <div class="grid grid-cols-2 gap-4 sm:gap-5 md:grid-cols-3 lg:grid-cols-4 anim-stagger">
         @forelse($products as $product)
             @include('store._product_card', ['product' => $product])
         @empty
-            <div class="rounded-2xl border bg-slate-50 p-6 text-center text-slate-700 md:col-span-2 lg:col-span-3">لا يوجد منتجات.</div>
+            <div class="rounded-2xl border bg-slate-50 p-6 text-center text-slate-700 col-span-2 md:col-span-3 lg:col-span-4">لا يوجد منتجات.</div>
         @endforelse
     </div>
 

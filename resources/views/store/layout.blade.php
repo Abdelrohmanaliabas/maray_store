@@ -8,7 +8,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="min-h-screen bg-gradient-to-b from-slate-50 via-white to-white text-slate-900">
-<header class="sticky top-0 z-40 border-b bg-white/80 backdrop-blur">
+<header class="sticky top-0 z-40 border-b bg-white/90 backdrop-blur">
     <div class="mx-auto max-w-6xl px-4">
         <div class="relative flex items-center justify-between py-3">
             <div class="flex items-center gap-2">
@@ -35,18 +35,18 @@
             </div>
 
             <a href="{{ route('store.home') }}" class="absolute left-1/2 -translate-x-1/2">
-                <img src="{{ asset('image/logo.jpg') }}" class="h-11 w-auto" alt="MARAY">
+                <img src="{{ asset('image/logo.jpg') }}" class="h-10 w-auto rounded-xl shadow-sm" alt="MARAY">
             </a>
 
             <div class="w-[96px] md:w-[160px]"></div>
         </div>
 
         <nav class="pb-3">
-            <div class="flex gap-2 overflow-auto whitespace-nowrap">
+            <div class="flex gap-2 overflow-auto whitespace-nowrap pb-1">
                 @foreach($navCategories as $cat)
                     <a
                         href="{{ route('store.category', $cat) }}"
-                        class="rounded-full border px-4 py-2 text-sm font-medium transition hover:bg-slate-50 {{ request()->routeIs('store.category') && request()->route('category')?->id === $cat->id ? 'border-slate-900 text-slate-900' : 'border-slate-200 text-slate-700' }}"
+                        class="rounded-full border px-4 py-2 text-sm font-semibold transition hover:bg-slate-50 {{ request()->routeIs('store.category') && request()->route('category')?->id === $cat->id ? 'border-slate-900 bg-slate-900 text-white shadow-sm' : 'border-slate-200 text-slate-700' }}"
                     >
                         {{ $cat->name }}
                     </a>

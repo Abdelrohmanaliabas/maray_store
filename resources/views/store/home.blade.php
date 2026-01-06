@@ -12,7 +12,7 @@
         </div>
     </div>
 
-    <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3 anim-stagger ">
+    <div class="grid grid-cols-2 gap-4 sm:gap-5 md:grid-cols-3 lg:grid-cols-4 anim-stagger">
         @foreach($products as $product)
             @include('store._product_card', ['product' => $product])
         @endforeach

@@ -9,14 +9,14 @@
 <div class="overflow-hidden rounded-2xl border bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
     <div class="relative">
         <a href="{{ route('store.product', $product) }}">
-            <img class="h-64 w-full object-cover hover:-scale-200" src="{{ $img ? asset($img) : $placeholder }}" alt="{{ $product->name }}">
+            <img class="aspect-square w-full object-cover" src="{{ $img ? asset($img) : $placeholder }}" alt="{{ $product->name }}">
         </a>
         @if($hasDiscount)
             <div class="absolute right-3 top-3 rounded-md bg-red-600 px-2 py-1 text-xs font-medium text-white">خصم</div>
         @endif
     </div>
 
-    <div class="p-4">
+    <div class="p-3 sm:p-4">
         <div class="min-h-12 text-sm font-semibold">
             <a class="hover:underline" href="{{ route('store.product', $product) }}">{{ $product->name }}</a>
         </div>
