@@ -54,8 +54,8 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
-    'dev_portfolio_url' => env('DEV_PORTFOLIO_URL', '#'),
-    'instagram_url' => env('INSTAGRAM_URL', '#'),
+    'dev_portfolio_url' => env('DEV_PORTFOLIO_URL', 'https://abdelrahmanali.wuaze.com/'),
+    'instagram_url' => env('INSTAGRAM_URL', 'https://www.instagram.com/red_toro.eg?igsh=Z3hvOTc2d2tlc2Fm&utm_source=qr'),
     'facebook_url' => env('FACEBOOK_URL', '#'),
     'tiktok_url' => env('TIKTOK_URL', '#'),
 

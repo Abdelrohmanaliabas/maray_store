@@ -136,7 +136,7 @@
         </div>
 
         <div class="mt-8 flex flex-wrap items-center justify-between gap-2 border-t pt-6 text-xs text-slate-500">
-            <div>© {{ date('Y') }} {{ config('app.name', 'Maray Store') }}</div>
+            {{-- <div>© {{ date('Y') }} {{ config('app.name', 'Maray Store') }}</div> --}}
             <a class="hover:text-slate-900" href="{{ config('app.dev_portfolio_url') }}" target="_blank" rel="noopener">Created {{ date('Y') }} — abas</a>
         </div>
     </div>
