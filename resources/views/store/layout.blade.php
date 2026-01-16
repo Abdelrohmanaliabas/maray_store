@@ -6,8 +6,29 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'المتجر') - {{ config('app.name', 'Maray Store') }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <style>
+        body.maray-bg {
+            background-image:
+                linear-gradient(rgba(248, 250, 252, 0.5), rgba(248, 250, 252, 0.92)),
+                url('{{ asset('image/logo.jpg') }}');
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: 600px auto;
+            background-size: clamp(280px, 60vw, 900px) auto;
+            background-attachment: fixed;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
 </head>
-<body class="min-h-screen bg-gradient-to-b from-slate-50 via-white to-white text-slate-900">
+<body class="min-h-screen text-slate-900 maray-bg">
 <header class="sticky top-0 z-40 border-b bg-white/90 backdrop-blur">
     <div class="mx-auto max-w-6xl px-4">
         <div class="relative flex items-center justify-between py-3">
@@ -42,11 +63,12 @@
         </div>
 
         <nav class="pb-3">
-            <div class="flex gap-2 overflow-auto whitespace-nowrap pb-1">
+            <div class="no-scrollbar -mx-4 flex snap-x snap-mandatory gap-2 overflow-x-auto px-4 pb-2 pt-1 md:mx-0 md:px-0">
                 @foreach($navCategories as $cat)
                     <a
                         href="{{ route('store.category', $cat) }}"
-                        class="rounded-full border px-4 py-2 text-sm font-semibold transition hover:bg-slate-50 {{ request()->routeIs('store.category') && request()->route('category')?->id === $cat->id ? 'border-slate-900 bg-slate-900 text-white shadow-sm' : 'border-slate-200 text-slate-700' }}"
+                        title="{{ $cat->name }}"
+                        class="snap-start shrink-0 truncate rounded-full border px-4 py-2 text-sm font-semibold transition hover:bg-slate-50 max-w-[220px] {{ request()->routeIs('store.category') && request()->route('category')?->id === $cat->id ? 'border-slate-900 bg-slate-900 text-white shadow-sm' : 'border-slate-200 text-slate-700' }}"
                     >
                         {{ $cat->name }}
                     </a>
@@ -137,6 +159,7 @@
 
         <div class="mt-8 flex flex-wrap items-center justify-between gap-2 border-t pt-6 text-xs text-slate-500">
             {{-- <div>© {{ date('Y') }} {{ config('app.name', 'Maray Store') }}</div> --}}
+            <a class="hover:text-slate-900" href="{{ config('app.dev_portfolio_url') }}" target="_blank" rel="noopener">تصميم عباس</a>
             <a class="hover:text-slate-900" href="{{ config('app.dev_portfolio_url') }}" target="_blank" rel="noopener">Created {{ date('Y') }} — abas</a>
         </div>
     </div>
