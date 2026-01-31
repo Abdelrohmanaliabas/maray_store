@@ -135,12 +135,12 @@
                             <circle cx="17.5" cy="6.5" r="1"></circle>
                         </svg>
                     </a>
-                    {{-- <a class="inline-flex h-10 w-10 items-center justify-center rounded-full border hover:bg-slate-50" href="{{ config('app.facebook_url', '#') }}" target="_blank" rel="noopener" aria-label="Facebook">
+                    <a class="inline-flex h-10 w-10 items-center justify-center rounded-full border hover:bg-slate-50" href="{{ config('app.facebook_url', '#') }}" target="_blank" rel="noopener" aria-label="Facebook">
                         <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M13.5 22v-8h2.8l.5-3H13.5V9c0-.9.2-1.5 1.6-1.5h2V4.7c-.3 0-1.5-.1-2.8-.1-2.8 0-4.7 1.7-4.7 4.9V11H7v3h2.6v8h3.9z"/>
                         </svg>
                     </a>
-                    <a class="inline-flex h-10 w-10 items-center justify-center rounded-full border hover:bg-slate-50" href="{{ config('app.tiktok_url', '#') }}" target="_blank" rel="noopener" aria-label="TikTok">
+                    {{-- <a class="inline-flex h-10 w-10 items-center justify-center rounded-full border hover:bg-slate-50" href="{{ config('app.tiktok_url', '#') }}" target="_blank" rel="noopener" aria-label="TikTok">
                         <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M16 3c.6 3.4 2.8 5.6 6 6v4c-2.2.1-4.1-.6-6-1.8V16c0 3.5-2.8 6.4-6.3 6.4-3.5 0-6.3-2.9-6.3-6.4 0-3.8 3.4-6.8 7.2-6.3v3.5c-1.8-.6-3.7.7-3.7 2.8 0 1.7 1.3 2.9 2.8 2.9 1.6 0 2.6-1.1 2.6-3.1V3h3.7z"/>
                         </svg>

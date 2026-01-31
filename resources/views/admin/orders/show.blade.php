@@ -42,7 +42,12 @@
             <div class="mt-4 flex justify-end">
                 <div class="w-full max-w-sm space-y-1 text-sm">
                     <div class="flex justify-between"><span class="text-slate-600">الإجمالي قبل الخصم</span><span>{{ number_format($order->subtotal, 2) }} EGP</span></div>
-                    <div class="flex justify-between"><span class="text-slate-600">الخصم</span><span>{{ number_format($order->discount_total, 2) }} EGP</span></div>
+                    @php($itemsDiscount = $order->items->sum('line_discount'))
+                    <div class="flex justify-between"><span class="text-slate-600">خصم المنتجات</span><span>{{ number_format($itemsDiscount, 2) }} EGP</span></div>
+                    @if($order->promo_code)
+                        <div class="flex justify-between"><span class="text-slate-600">خصم البروموكود ({{ $order->promo_code }})</span><span>{{ number_format($order->promo_discount, 2) }} EGP</span></div>
+                    @endif
+                    <div class="flex justify-between"><span class="text-slate-600">إجمالي الخصم</span><span>{{ number_format($order->discount_total, 2) }} EGP</span></div>
                     <div class="flex justify-between text-base font-semibold"><span>الإجمالي</span><span>{{ number_format($order->total, 2) }} EGP</span></div>
                     <div class="text-xs text-slate-600">الدفع: عند الاستلام</div>
                 </div>
@@ -78,4 +83,3 @@
         </div>
     </div>
 @endsection
-

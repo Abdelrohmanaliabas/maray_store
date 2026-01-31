@@ -14,6 +14,7 @@
             <nav class="hidden gap-3 text-sm text-slate-600 md:flex">
                 <a class="hover:text-slate-900" href="{{ route('admin.products.index') }}">المنتجات</a>
                 <a class="hover:text-slate-900" href="{{ route('admin.orders.index') }}">الأوردرات</a>
+                <a class="hover:text-slate-900" href="{{ route('admin.promo-codes.index') }}">بروموكود</a>
             </nav>
         </div>
         <form method="POST" action="{{ route('admin.logout') }}">

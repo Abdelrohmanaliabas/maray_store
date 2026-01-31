@@ -74,6 +74,11 @@
                         <label class="mb-1 block text-sm font-medium">ملاحظات (اختياري)</label>
                         <textarea name="notes" rows="2" class="w-full rounded-lg border px-3 py-2 text-sm">{{ old('notes') }}</textarea>
                     </div>
+                    <div class="md:col-span-2">
+                        <label class="mb-1 block text-sm font-medium">بروموكود (اختياري)</label>
+                        <input name="promo_code" value="{{ old('promo_code') }}" class="w-full rounded-lg border px-3 py-2 text-sm" placeholder="مثال: SAVE10">
+                        <div class="mt-1 text-xs text-slate-600">لو الكود صحيح هيتم تطبيق الخصم عند تأكيد الطلب.</div>
+                    </div>
                 </div>
 
                 <div class="rounded-2xl border bg-slate-50 p-4">
@@ -102,4 +107,3 @@
         </div>
     </div>
 @endsection
-

@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\ProductVariant;
 use App\Services\CartService;
+use App\Services\PromoCodeService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -24,7 +25,7 @@ class CheckoutController extends Controller
         return view('store.checkout', ['cart' => $hydrated]);
     }
 
-    public function place(Request $request, CartService $cart)
+    public function place(Request $request, CartService $cart, PromoCodeService $promoService)
     {
         $data = $request->validate([
             'customer_name' => ['required', 'string', 'max:255'],
@@ -33,6 +34,7 @@ class CheckoutController extends Controller
             'governorate' => ['required', 'string', 'max:255'],
             'address' => ['required', 'string', 'max:2000'],
             'notes' => ['nullable', 'string', 'max:2000'],
+            'promo_code' => ['nullable', 'string', 'max:50'],
         ]);
 
         $hydrated = $cart->hydrate();
@@ -40,7 +42,7 @@ class CheckoutController extends Controller
             return redirect()->route('store.home');
         }
 
-        $order = DB::transaction(function () use ($data, $hydrated, $cart) {
+        $order = DB::transaction(function () use ($data, $hydrated, $cart, $promoService) {
             $variantIds = collect($hydrated['items'])
                 ->map(fn ($i) => $i['variant']?->id)
                 ->filter()
@@ -76,6 +78,29 @@ class CheckoutController extends Controller
                 }
             }
 
+            $promo = null;
+            $promoDiscount = 0.0;
+            $baseTotal = (float) ($hydrated['total'] ?? 0);
+
+            $promoCodeInput = trim((string) ($data['promo_code'] ?? ''));
+            if ($promoCodeInput !== '') {
+                $promo = $promoService->findByCode($promoCodeInput, true);
+                if (! $promo) {
+                    throw ValidationException::withMessages([
+                        'promo_code' => 'البروموكود غير صحيح.',
+                    ]);
+                }
+
+                $promoService->assertCanApply($promo, $baseTotal);
+                $promoDiscount = $promoService->discountFor($promo, $baseTotal);
+
+                if ($promoDiscount <= 0) {
+                    throw ValidationException::withMessages([
+                        'promo_code' => 'البروموكود غير صالح.',
+                    ]);
+                }
+            }
+
             $order = Order::create([
                 'order_number' => 'MS-'.strtoupper(Str::random(8)),
                 'status' => 'new',
@@ -86,8 +111,11 @@ class CheckoutController extends Controller
                 'address' => $data['address'],
                 'notes' => $data['notes'] ?? null,
                 'subtotal' => $hydrated['subtotal'],
-                'discount_total' => $hydrated['discount_total'],
-                'total' => $hydrated['total'],
+                'discount_total' => round(((float) $hydrated['discount_total']) + $promoDiscount, 2),
+                'promo_code_id' => $promo?->id,
+                'promo_code' => $promo?->code,
+                'promo_discount' => round($promoDiscount, 2),
+                'total' => round(max(0.0, ((float) $hydrated['total']) - $promoDiscount), 2),
                 'payment_method' => 'cod',
             ]);
 
@@ -115,6 +143,11 @@ class CheckoutController extends Controller
             }
 
             OrderItem::insert($items);
+
+            if ($promo) {
+                $promo->increment('used_count');
+            }
+
             $cart->clear();
 
             return $order;

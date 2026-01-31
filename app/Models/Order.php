@@ -23,6 +23,9 @@ class Order extends Model
         'notes',
         'subtotal',
         'discount_total',
+        'promo_code_id',
+        'promo_code',
+        'promo_discount',
         'total',
         'payment_method',
         'created_by_admin_id',
@@ -33,6 +36,7 @@ class Order extends Model
         return [
             'subtotal' => 'decimal:2',
             'discount_total' => 'decimal:2',
+            'promo_discount' => 'decimal:2',
             'total' => 'decimal:2',
         ];
     }
@@ -46,5 +50,9 @@ class Order extends Model
     {
         return $this->belongsTo(Admin::class, 'created_by_admin_id');
     }
-}
 
+    public function promoCode(): BelongsTo
+    {
+        return $this->belongsTo(PromoCode::class);
+    }
+}

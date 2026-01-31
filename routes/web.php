@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminOrderController;
+use App\Http\Controllers\Admin\AdminPromoCodeController;
 use App\Http\Controllers\Admin\AdminProductController;
 use App\Http\Controllers\Store\CartController;
 use App\Http\Controllers\Store\CatalogController;
@@ -34,6 +35,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         Route::resource('products', AdminProductController::class)->except(['show']);
         Route::delete('products/{product}/images/{image}', [AdminProductController::class, 'destroyImage'])->name('products.images.destroy');
+
+        Route::resource('promo-codes', AdminPromoCodeController::class)->except(['show']);
 
         Route::get('orders', [AdminOrderController::class, 'index'])->name('orders.index');
         Route::get('orders/create', [AdminOrderController::class, 'create'])->name('orders.create');
