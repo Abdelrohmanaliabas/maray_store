@@ -13,7 +13,11 @@ class CatalogController extends Controller
     {
         $query = Product::query()
             ->where('is_active', true)
-            ->with(['images', 'category'])
+            ->with([
+                'images',
+                'category',
+                'bulkDiscounts' => fn ($q) => $q->where('is_active', true)->orderByDesc('min_qty'),
+            ])
             ->withCount(['variants as in_stock_variants_count' => function ($q) {
                 $q->where('quantity', '>', 0);
             }])
@@ -36,7 +40,11 @@ class CatalogController extends Controller
     {
         $query = $category->products()
             ->where('is_active', true)
-            ->with(['images', 'category'])
+            ->with([
+                'images',
+                'category',
+                'bulkDiscounts' => fn ($q) => $q->where('is_active', true)->orderByDesc('min_qty'),
+            ])
             ->withCount(['variants as in_stock_variants_count' => function ($q) {
                 $q->where('quantity', '>', 0);
             }])
@@ -66,7 +74,11 @@ class CatalogController extends Controller
             ->where('is_active', true)
             ->where('id', '!=', $product->id)
             ->when($product->category_id, fn ($q) => $q->where('category_id', $product->category_id))
-            ->with(['images', 'category'])
+            ->with([
+                'images',
+                'category',
+                'bulkDiscounts' => fn ($q) => $q->where('is_active', true)->orderByDesc('min_qty'),
+            ])
             ->withCount(['variants as in_stock_variants_count' => function ($q) {
                 $q->where('quantity', '>', 0);
             }])
@@ -81,7 +93,11 @@ class CatalogController extends Controller
                 ->where('is_active', true)
                 ->where('id', '!=', $product->id)
                 ->when($product->category_id, fn ($q) => $q->where('category_id', '!=', $product->category_id))
-                ->with(['images', 'category'])
+                ->with([
+                    'images',
+                    'category',
+                    'bulkDiscounts' => fn ($q) => $q->where('is_active', true)->orderByDesc('min_qty'),
+                ])
                 ->withCount(['variants as in_stock_variants_count' => function ($q) {
                     $q->where('quantity', '>', 0);
                 }])

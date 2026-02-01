@@ -53,6 +53,8 @@
                 <div class="mt-4 text-sm leading-7 text-slate-700">{{ $product->description }}</div>
             @endif
 
+            @include('store._bulk_discounts', ['product' => $product])
+
             <div class="mt-6 rounded-2xl border bg-white p-5">
                 <div class="flex items-center justify-between gap-3">
                     <div class="text-sm font-semibold">اختيار اللون والمقاس</div>

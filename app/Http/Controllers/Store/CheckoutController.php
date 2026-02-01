@@ -25,6 +25,74 @@ class CheckoutController extends Controller
         return view('store.checkout', ['cart' => $hydrated]);
     }
 
+    public function preview(Request $request, CartService $cart, PromoCodeService $promoService)
+    {
+        abort_unless($request->wantsJson(), 404);
+
+        $data = $request->validate([
+            'promo_code' => ['nullable', 'string', 'max:50'],
+        ]);
+
+        $hydrated = $cart->hydrate();
+        if (count($hydrated['items']) === 0) {
+            throw ValidationException::withMessages([
+                'cart' => 'السلة فارغة.',
+            ]);
+        }
+
+        $subtotal = (float) ($hydrated['subtotal'] ?? 0);
+        $bulkDiscount = (float) ($hydrated['discount_total'] ?? 0);
+        $baseTotal = (float) ($hydrated['total'] ?? 0);
+
+        $promo = null;
+        $promoDiscount = 0.0;
+
+        $promoCodeInput = trim((string) ($data['promo_code'] ?? ''));
+        if ($promoCodeInput !== '') {
+            $promo = $promoService->findByCode($promoCodeInput);
+            if (! $promo) {
+                throw ValidationException::withMessages([
+                    'promo_code' => 'البروموكود غير صحيح.',
+                ]);
+            }
+
+            $promoService->assertCanApply($promo, $baseTotal);
+            $promoDiscount = $promoService->discountFor($promo, $baseTotal);
+
+            if ($promoDiscount <= 0) {
+                throw ValidationException::withMessages([
+                    'promo_code' => 'البروموكود غير صالح.',
+                ]);
+            }
+        }
+
+        $discountTotal = round($bulkDiscount + $promoDiscount, 2);
+        $total = round(max(0.0, $subtotal - $discountTotal), 2);
+
+        $items = collect($hydrated['items'])->map(function ($item) {
+            return [
+                'name' => $item['product']->name,
+                'variant' => trim(($item['variant']?->color ?? '').' / '.($item['variant']?->size ?? ''), ' /'),
+                'qty' => (int) $item['qty'],
+                'unit_price' => (float) $item['unit_price'],
+                'line_subtotal' => (float) $item['line_subtotal'],
+                'line_discount' => (float) $item['line_discount'],
+                'line_total' => (float) $item['line_total'],
+            ];
+        })->values();
+
+        return response()->json([
+            'ok' => true,
+            'promo_code' => $promo?->code,
+            'subtotal' => round($subtotal, 2),
+            'bulk_discount' => round($bulkDiscount, 2),
+            'promo_discount' => round($promoDiscount, 2),
+            'discount_total' => $discountTotal,
+            'total' => $total,
+            'items' => $items,
+        ]);
+    }
+
     public function place(Request $request, CartService $cart, PromoCodeService $promoService)
     {
         $data = $request->validate([

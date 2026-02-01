@@ -21,6 +21,8 @@
             <a class="hover:underline" href="{{ route('store.product', $product) }}">{{ $product->name }}</a>
         </div>
 
+        @include('store._bulk_discounts', ['product' => $product, 'limit' => 2])
+
         <div class="mt-2 flex items-end justify-between gap-3">
             <div class="text-right">
                 @if($hasDiscount)

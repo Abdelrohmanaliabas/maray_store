@@ -22,6 +22,7 @@ Route::post('/cart/remove', [CartController::class, 'remove'])->name('store.cart
 Route::post('/cart/clear', [CartController::class, 'clear'])->name('store.cart.clear');
 
 Route::get('/checkout', [CheckoutController::class, 'show'])->name('store.checkout');
+Route::post('/checkout/preview', [CheckoutController::class, 'preview'])->name('store.checkout.preview');
 Route::post('/checkout', [CheckoutController::class, 'place'])->name('store.checkout.place');
 Route::get('/order/success/{order}', [CheckoutController::class, 'success'])->name('store.order.success');
 
